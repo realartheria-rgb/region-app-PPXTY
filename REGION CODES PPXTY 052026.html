@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="theme-color" content="#3a2415" />
+  <title>Код региона номера РФ</title>
+  <style>
+    :root{
+      --bg1:#160d08;
+      --bg2:#2a180f;
+      --bg3:#3b2415;
+      --card:rgba(68,41,25,.58);
+      --card2:rgba(92,58,33,.42);
+      --line:rgba(255,214,102,.14);
+      --text:#fff7e8;
+      --muted:#d9c4a6;
+      --gold:#f2c14e;
+      --gold2:#ffd87a;
+      --green:#86efac;
+      --red:#ff8a8a;
+      --shadow:0 18px 50px rgba(0,0,0,.36);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top, rgba(242,193,78,.18), transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(255,216,122,.12), transparent 24%),
+        linear-gradient(180deg,var(--bg3),var(--bg1));
+      overflow-x:hidden;
+    }
+
+    .app{
+      max-width:560px;
+      margin:0 auto;
+      padding:16px 16px 110px;
+    }
+
+    .top{
+      padding:18px 16px;
+      border-radius:30px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      backdrop-filter:blur(18px);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .top:before{
+      content:"";
+      position:absolute;
+      top:-60px;
+      left:-40px;
+      width:150px;
+      height:150px;
+      background:radial-gradient(circle, rgba(242,193,78,.26), transparent 68%);
+      pointer-events:none;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(242,193,78,.2);
+      background:rgba(242,193,78,.12);
+      color:#ffe9a8;
+      font-size:13px;
+      margin-bottom:12px;
+    }
+
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--gold);
+      box-shadow:0 0 12px rgba(242,193,78,.8);
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+
+    p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.55;
+    }
+
+    .screen{
+      margin-top:16px;
+      display:none;
+      animation:fadeUp .28s ease-out;
+    }
+
+    .screen.active{display:block}
+
+    @keyframes fadeUp{
+      from{opacity:0; transform:translateY(10px)}
+      to{opacity:1; transform:translateY(0)}
+    }
+
+    .panel{
+      margin-top:14px;
+      padding:16px;
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,var(--card),var(--card2));
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+    }
+
+    input{
+      flex:1;
+      padding:16px;
+      font-size:20px;
+      border-radius:18px;
+      border:1px solid rgba(255,214,102,.22);
+      background:rgba(20,12,8,.7);
+      color:var(--text);
+      outline:none;
+    }
+
+    input::placeholder{color:rgba(255,247,232,.45)}
+    input:focus{
+      border-color:rgba(242,193,78,.6);
+      box-shadow:0 0 0 4px rgba(242,193,78,.14);
+    }
+
+    .btn{
+      border:0;
+      border-radius:18px;
+      padding:0 18px;
+      min-width:100px;
+      font-size:16px;
+      font-weight:900;
+      color:#2b1a0e;
+      background:linear-gradient(180deg,#ffe28e,var(--gold));
+      box-shadow:0 12px 22px rgba(242,193,78,.24);
+      cursor:pointer;
+    }
+
+    .btn:active{transform:translateY(1px)}
+
+    .result{
+      margin-top:12px;
+      padding:16px;
+      border-radius:22px;
+      border:1px solid rgba(255,214,102,.14);
+      background:rgba(17,11,8,.28);
+    }
+
+    .region{
+      font-size:24px;
+      font-weight:900;
+      margin-bottom:8px;
+      letter-spacing:-.02em;
+    }
+
+    .codes{
+      color:var(--muted);
+      line-height:1.5;
+      font-size:14px;
+    }
+
+    .hint{
+      margin-top:10px;
+      font-size:13px;
+      color:rgba(255,247,232,.6);
+    }
+
+    .ok{color:var(--green)}
+    .bad{color:var(--red)}
+
+    .list{
+      margin-top:16px;
+      padding:16px;
+      border-radius:28px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
+    }
+
+    .list h2{
+      margin:0 0 12px;
+      font-size:18px;
+    }
+
+    .item{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding:11px 0;
+      border-top:1px solid rgba(255,214,102,.12);
+      font-size:14px;
+    }
+
+    .item:first-child{border-top:0}
+    .code{
+      min-width:44px;
+      font-weight:900;
+      color:var(--gold2);
+    }
+    .regionName{
+      text-align:right;
+      color:var(--text);
+    }
+
+    .nav{
+      position:fixed;
+      left:0; right:0; bottom:0;
+      padding:14px 16px 18px;
+      z-index:20;
+      pointer-events:none;
+    }
+
+    .nav-inner{
+      max-width:560px;
+      margin:0 auto;
+      padding:10px;
+      border-radius:28px;
+      border:1px solid rgba(255,214,102,.14);
+      background:rgba(30,18,11,.68);
+      backdrop-filter:blur(18px);
+      box-shadow:0 18px 40px rgba(0,0,0,.42);
+      display:flex;
+      gap:8px;
+      pointer-events:auto;
+    }
+
+    .tab{
+      flex:1;
+      border:0;
+      border-radius:20px;
+      background:transparent;
+      color:rgba(255,247,232,.72);
+      padding:12px 8px;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+      transition:all .22s ease;
+    }
+
+    .tab .icon{
+      font-size:20px;
+      line-height:1;
+      transition:transform .22s ease;
+    }
+
+    .tab .label{
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .tab.active{
+      background:linear-gradient(180deg, rgba(242,193,78,.22), rgba(242,193,78,.12));
+      color:#fff7e8;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .tab.active .icon{
+      transform:translateY(-2px) scale(1.08);
+    }
+
+    .card-grid{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .mini-card{
+      padding:14px;
+      border-radius:22px;
+      border:1px solid rgba(255,214,102,.14);
+      background:rgba(17,11,8,.28);
+    }
+
+    .mini-title{
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .mini-text{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .small{
+      font-size:13px;
+      color:rgba(255,247,232,.62);
+      line-height:1.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="top">
+      <div class="eyebrow"><span class="dot"></span> Премиальный поиск региона</div>
+      <h1>Код региона номера РФ</h1>
+      <p>Введите 2–3 цифры с автомобильного номера, и приложение сразу покажет регион.</p>
+
+      <div id="searchScreen" class="screen active">
+        <div class="panel">
+          <div class="row">
+            <input id="codeInput" inputmode="numeric" placeholder="Например: 77, 01, 159" maxlength="3" />
+            <button class="btn" id="findBtn">Найти</button>
+          </div>
+
+          <div class="result">
+            <div class="region" id="regionText">Введите код</div>
+            <div class="codes" id="codesText">Результат появится здесь.</div>
+          </div>
+
+          <div class="hint">Поддерживаются коды с ведущим нулём: 01, 02, 07 и др.</div>
+        </div>
+      </div>
+
+      <div id="catalogScreen" class="screen">
+        <div class="panel">
+          <div class="mini-card">
+            <div class="mini-title">Как пользоваться</div>
+            <div class="mini-text">Введите код региона с номера автомобиля. Например, 77 — Москва, 78 — Санкт‑Петербург, 50 — Московская область.</div>
+          </div>
+          <div class="mini-card" style="margin-top:12px;">
+            <div class="mini-title">Формат</div>
+            <div class="mini-text">Код обычно состоит из 2 или 3 цифр. Приложение автоматически убирает лишние символы.</div>
+          </div>
+          <div class="mini-card" style="margin-top:12px;">
+            <div class="mini-title">Совет</div>
+            <div class="mini-text">Если нужен офлайн-режим, этот экран можно легко превратить в PWA и установить на экран телефона.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="aboutScreen" class="screen">
+        <div class="panel">
+          <div class="mini-card">
+            <div class="mini-title">О приложении</div>
+            <div class="mini-text">Лёгкое мобильное веб-приложение без сервера: всё работает прямо в браузере смартфона.</div>
+          </div>
+          <div class="mini-card" style="margin-top:12px;">
+            <div class="mini-title">Возможности</div>
+            <div class="mini-text">Можно добавить виброотклик, сохранение истории запросов и распознавание по фото номера.</div>
+          </div>
+          <div class="mini-card" style="margin-top:12px;">
+            <div class="mini-title">Стиль</div>
+            <div class="mini-text">Коричнево-жёлтая премиальная тема с мягким glassmorphism и анимацией переходов.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="list">
+      <h2>Популярные коды</h2>
+      <div id="popularList"></div>
+    </div>
+
+    <div class="small" style="margin-top:14px; padding:0 4px;">
+      Быстрый пример: 77 → Москва, 78 → Санкт‑Петербург, 50 → Московская область.
+    </div>
+  </div>
+
+  <div class="nav">
+    <div class="nav-inner">
+      <button class="tab active" data-screen="searchScreen">
+        <div class="icon">⌕</div>
+        <div class="label">Поиск</div>
+      </button>
+      <button class="tab" data-screen="catalogScreen">
+        <div class="icon">▦</div>
+        <div class="label">Справка</div>
+      </button>
+      <button class="tab" data-screen="aboutScreen">
+        <div class="icon">✦</div>
+        <div class="label">О прилож.</div>
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const data = [
+      { codes: ['01'], region: 'Республика Адыгея' },
+      { codes: ['02','102'], region: 'Республика Башкортостан' },
+      { codes: ['03'], region: 'Республика Бурятия' },
+      { codes: ['04'], region: 'Республика Алтай' },
+      { codes: ['05'], region: 'Республика Дагестан' },
+      { codes: ['06'], region: 'Республика Ингушетия' },
+      { codes: ['07'], region: 'Кабардино-Балкарская Республика' },
+      { codes: ['08'], region: 'Республика Калмыкия' },
+      { codes: ['09'], region: 'Карачаево-Черкесская Республика' },
+      { codes: ['10'], region: 'Республика Карелия' },
+      { codes: ['11'], region: 'Республика Коми' },
+      { codes: ['12'], region: 'Республика Марий Эл' },
+      { codes: ['13','113'], region: 'Республика Мордовия' },
+      { codes: ['14'], region: 'Республика Саха (Якутия)' },
+      { codes: ['15'], region: 'Республика Северная Осетия — Алания' },
+      { codes: ['16','116'], region: 'Республика Татарстан' },
+      { codes: ['17'], region: 'Республика Тыва' },
+      { codes: ['18'], region: 'Удмуртская Республика' },
+      { codes: ['19'], region: 'Республика Хакасия' },
+      { codes: ['21','121'], region: 'Чувашская Республика' },
+      { codes: ['22'], region: 'Алтайский край' },
+      { codes: ['23','93','123'], region: 'Краснодарский край' },
+      { codes: ['24','84','88','124'], region: 'Красноярский край' },
+      { codes: ['25','125'], region: 'Приморский край' },
+      { codes: ['26'], region: 'Ставропольский край' },
+      { codes: ['27'], region: 'Хабаровский край' },
+      { codes: ['28'], region: 'Амурская область' },
+      { codes: ['29'], region: 'Архангельская область' },
+      { codes: ['30'], region: 'Астраханская область' },
+      { codes: ['31'], region: 'Белгородская область' },
+      { codes: ['32'], region: 'Брянская область' },
+      { codes: ['33'], region: 'Владимирская область' },
+      { codes: ['34','134'], region: 'Волгоградская область' },
+      { codes: ['35'], region: 'Вологодская область' },
+      { codes: ['36','136'], region: 'Воронежская область' },
+      { codes: ['37'], region: 'Ивановская область' },
+      { codes: ['38','85','138'], region: 'Иркутская область' },
+      { codes: ['39','91'], region: 'Калининградская область' },
+      { codes: ['40'], region: 'Калужская область' },
+      { codes: ['41','82'], region: 'Камчатский край' },
+      { codes: ['42','142'], region: 'Кемеровская область' },
+      { codes: ['43'], region: 'Кировская область' },
+      { codes: ['44'], region: 'Костромская область' },
+      { codes: ['45'], region: 'Курганская область' },
+      { codes: ['46'], region: 'Курская область' },
+      { codes: ['47'], region: 'Ленинградская область' },
+      { codes: ['48'], region: 'Липецкая область' },
+      { codes: ['49'], region: 'Магаданская область' },
+      { codes: ['50','90','150','190'], region: 'Московская область' },
+      { codes: ['51'], region: 'Мурманская область' },
+      { codes: ['52','152'], region: 'Нижегородская область' },
+      { codes: ['53'], region: 'Новгородская область' },
+      { codes: ['54','154'], region: 'Новосибирская область' },
+      { codes: ['55'], region: 'Омская область' },
+      { codes: ['56'], region: 'Оренбургская область' },
+      { codes: ['57'], region: 'Орловская область' },
+      { codes: ['58'], region: 'Пензенская область' },
+      { codes: ['59','81','159'], region: 'Пермский край' },
+      { codes: ['60'], region: 'Псковская область' },
+      { codes: ['61','161'], region: 'Ростовская область' },
+      { codes: ['62'], region: 'Рязанская область' },
+      { codes: ['63','163'], region: 'Самарская область' },
+      { codes: ['64','164'], region: 'Саратовская область' },
+      { codes: ['65'], region: 'Сахалинская область' },
+      { codes: ['66','96'], region: 'Свердловская область' },
+      { codes: ['67'], region: 'Смоленская область' },
+      { codes: ['68'], region: 'Тамбовская область' },
+      { codes: ['69'], region: 'Тверская область' },
+      { codes: ['70'], region: 'Томская область' },
+      { codes: ['71'], region: 'Тульская область' },
+      { codes: ['72'], region: 'Тюменская область' },
+      { codes: ['73','173'], region: 'Ульяновская область' },
+      { codes: ['74','174'], region: 'Челябинская область' },
+      { codes: ['75','80'], region: 'Забайкальский край' },
+      { codes: ['76'], region: 'Ярославская область' },
+      { codes: ['77','97','99','177','197','199'], region: 'Москва' },
+      { codes: ['78','98','178'], region: 'Санкт-Петербург' },
+      { codes: ['79'], region: 'Еврейская автономная область' },
+      { codes: ['83'], region: 'Ненецкий автономный округ' },
+      { codes: ['86','186'], region: 'Ханты-Мансийский автономный округ — Югра' },
+      { codes: ['87'], region: 'Чукотский автономный округ' },
+      { codes: ['89'], region: 'Ямало-Ненецкий автономный округ' },
+      { codes: ['94'], region: 'Байконур' },
+      { codes: ['95'], region: 'Чеченская Республика' }
+    ];
+
+    const byCode = new Map();
+    data.forEach(item => item.codes.forEach(c => byCode.set(c, item)));
+
+    const input = document.getElementById('codeInput');
+    const regionText = document.getElementById('regionText');
+    const codesText = document.getElementById('codesText');
+    const popularList = document.getElementById('popularList');
+    const tabs = [...document.querySelectorAll('.tab')];
+    const screens = [...document.querySelectorAll('.screen')];
+
+    function normalize(v){ return String(v || '').replace(/\D/g,'').slice(0,3); }
+
+    function lookup(){
+      const code = normalize(input.value);
+      input.value = code;
+      const item = byCode.get(code);
+
+      if(item){
+        regionText.textContent = item.region;
+        codesText.innerHTML = '<span class="ok">Найдено</span> • коды: ' + item.codes.join(', ');
+      } else if(code.length === 0){
+        regionText.textContent = 'Введите код';
+        codesText.textContent = 'Результат появится здесь.';
+      } else {
+        regionText.textContent = 'Не найдено';
+        codesText.innerHTML = '<span class="bad">Код не распознан</span> • проверьте ввод.';
+      }
+    }
+
+    function renderPopular(){
+      const arr = ['77','78','66','16','50','51','23','61','54','74','95','01','24','90','102'];
+      popularList.innerHTML = arr.map(c => {
+        const item = byCode.get(c);
+        return `<div class="item"><div class="code">${c}</div><div class="regionName">${item ? item.region : '—'}</div></div>`;
+      }).join('');
+    }
+
+    function showScreen(id){
+      screens.forEach(s => s.classList.toggle('active', s.id === id));
+      tabs.forEach(t => t.classList.toggle('active', t.dataset.screen === id));
+    }
+
+    tabs.forEach(tab => tab.addEventListener('click', () => showScreen(tab.dataset.screen)));
+
+    document.getElementById('findBtn').addEventListener('click', lookup);
+    input.addEventListener('input', lookup);
+    input.addEventListener('keydown', e => { if(e.key === 'Enter') lookup(); });
+
+    renderPopular();
+    lookup();
+  </script>
+</body>
+</html>
